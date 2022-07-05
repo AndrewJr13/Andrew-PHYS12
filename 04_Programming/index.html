@@ -38,6 +38,37 @@
 
   ![](./side1.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./motors.png)
 
+  Next I completed the other side of the frame and attached the motor to the other side of the bridge. At this point, the only 
+  thing left to do was to hook up the motors to Arduino and program them to raise and lower the bridge. I first declared
+  both motors to pins 3, 4, 5, and 6. 
+
+  <pre><code class="language-arduino">
+    const int A1A = 3;  // Declaring pins for both motors
+  const int A1B = 4;
+  const int B1A = 5;
+  const int B2A = 6;
+  </code></pre>
+
+  After this I had to setup both motors using the pinMode and digitalWrite methods. 
+
+  <pre><code class="language-arduino">
+    void setup() {
+      pinMode(A1A, OUTPUT);      
+      pinMode(A1B, OUTPUT);
+      pinMode(B1A, OUTPUT);
+      pinMode(B2A, OUTPUT);
+      digitalWrite(A1A, LOW);   // start with both the motors off 
+      digitalWrite(A1B, LOW);
+      digitalWrite(B1A, LOW);
+      digitalWrite(B2A, LOW);
+    }
+  </code></pre>
+
+  
+
+
+  
+
  [Back](../index.html).
 
 
