@@ -65,8 +65,43 @@
   </code></pre>
 
   
+  Now I started the loop method. I'll give a breif explanation of the things going on in this method
+  First I power both motors on and have them spin in one direction for 0.55 seconds to raise the 
+  bridge. Next, both motors pause for 1 second. After that, the code changes the direction of both motors
+  by changing the power provided to each motor. It then runs in the opposite direction for another 0.55 seconds.
+  Lastly, both motors stop for three seconds and repeat the loop. 
 
-
+  <pre><code class="language-arduino">
+    void loop() {
+      // start the motor 
+      digitalWrite(A1A, HIGH);   
+      digitalWrite(A1B, LOW);   // Start Both motors in one direction 
+      digitalWrite(B1A, HIGH);
+      digitalWrite(B2A, LOW);
+      delay(550);              // allow the motor to run for 0.55
+    
+      // stop the motor
+      digitalWrite(A1A, LOW);   // Stop Both Motors for 1 secon
+      digitalWrite(A1B, LOW);
+      digitalWrite(B1A, LOW);
+      digitalWrite(B2A, LOW);
+      delay(1000);              
+     
+      digitalWrite(A1A, LOW);  //Switch directions for both motors
+      digitalWrite(A1B, HIGH);
+      digitalWrite(B1A, LOW);
+      digitalWrite(B2A, HIGH);  
+      delay(550);              // allow the motor to run for 0.55 seconds
+    
+      // stop the motor
+      digitalWrite(A1A, LOW);   // stop both motors for 3 seconds
+      digitalWrite(A1B, LOW);
+      digitalWrite(B1A, LOW);
+      digitalWrite(B2A, LOW);
+      delay(3000);   
+    
+    }
+  </code></pre>  
   
 
  [Back](../index.html).
