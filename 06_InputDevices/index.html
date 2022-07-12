@@ -66,11 +66,74 @@ void loop() {
 
   ![](./bboard.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./readings.png)
 
+  Finally, I have two programs that I ran the microphone through. The first program would just give an output 
+  for me to record on the table based on the noise level but I then wrote another one to turn the microphone into a 
+  little noise detector. The code was pretty basic. Whenever the microphone would get a reading higher than 5 or 10,
+  it will print out "Noise Detected" in the serial monitor. One thing I also noticed was that the microphone also 
+  has pretty good range. Obviously, the closer the sound the higher the reading but even standing 10-15 feet away from 
+  the microphone still gave readings. 
+  <br>
+  <br>
+  First Program:
+
+  <pre><code class="language-arduino">
+    const int sampleWindow = 50; 
+ unsigned int sample;
+
+ void setup() 
+ {
+    Serial.begin(9600);
+ }
+
+
+ void loop() 
+ {
+    unsigned long startMillis= millis();  
+    unsigned int peakToPeak = 0;   
+
+    unsigned int signalMax = 0;
+    unsigned int signalMin = 1024;
+
+    // collect data for 50 mS
+    while (millis() - startMillis < sampleWindow)
+    {
+       sample = analogRead(0);   
+       if (sample < 1024)  
+       {
+          if (sample > signalMax)
+          {
+             signalMax = sample;  
+          }
+          else if (sample < signalMin)
+          {
+             signalMin = sample;  
+          }
+       }
+    }
+    peakToPeak = signalMax - signalMin;  
+
+    Serial.println(peakToPeak);
+ }
+</code></pre>
+  <br>
+  <br>
+  Here's what I changed in the first program to make the noise detector. I just added a very simple if statement and a new print statement. 
+  
+  <pre><code class="language-arduino">
+    if (peakToPeak > 10)
+    {
+      Serial.println("Noise Detected");
+    }
+  </code></pre>    
+
+
+
+
 
   
 
 
-
+  [Download Decibel X](../https://apps.apple.com/us/app/decibel-x-db-sound-level-meter/id448155923).
   [Back](../index.html).
 
 
