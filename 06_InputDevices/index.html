@@ -22,8 +22,41 @@
   is two pieces of copper stuck to pieces of velostat. As the pieces were compressed,they got closer together
   giving higher readings on the serial monitor. A quick few lines of code to get the readikng from the pieces and 
   give an ouput were necessary but it was generally an easy make. 
+  
   ![](./parts.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./connection.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./sensor.png)
+  
+  I then used a scale in the lab to weigh various objects. I took down their weight in grams, converted their weight 
+  into newtons to measure force then recorded the output. I tested my phone, a piece of metal, and a drill. 
 
+  ![](./table.png)
+
+  And here is the code I used for the sensor.
+
+  <pre><code class="language-arduino">
+    int analog_pin = A3;
+  int tx_pin = 4;
+  int read_high;
+  int read_low;
+  int diff; 
+
+void setup() {
+    pinMode(tx_pin, OUTPUT);      
+    Serial.begin(9600);
+}
+
+void loop() {
+    digitalWrite(tx_pin,HIGH);           
+    read_high = analogRead(analog_pin);  
+    delayMicroseconds(100);              
+    digitalWrite(tx_pin,LOW);            
+    read_low = analogRead(analog_pin);   
+    diff = read_high - read_low;         
+    Serial.println(diff);
+}
+  </code></pre>
+  
+
+  
 
 
 
