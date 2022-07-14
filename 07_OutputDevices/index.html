@@ -14,12 +14,91 @@
 <br>
 <br>
   <head>Class 7: Electronic Output Devices</head>
-  <video controls width="550" height="400">
-      <source src="IMG_4067.mp4"
-              type="video/mp4">
+  For Class 7 our assignment was to merge what we learned last week about input devices with
+  an output device. Last week I experimented with a microphone so I decided to expand a little on that. My initial
+  ideas was to create an alarm system tha would be activated by a loud noise. I decided to get some initial wiring down
+  and then try to write a program. Most of the wiring in this project was relativley easy. Most of it was just hooking up the 
+  devices individualy. For the buzzer, I cut some wires and soldered them to the pins and used another very small wire 
+  for a short connetion on the board. 
+
+  ![](./buzzer.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./alarm.png)
+
+  As I said, the connections were generally simple. I hooked the microphone up to power and hooked the buzzer 
+  up to an assigned pin. Next I started off trying to integrate a simple program. I started off with a program 
+  that would take readings from the noise level the microphone was reciving. I put this in the void loop method. 
+  Next I decided that the alarm would go off for noises above 10 units on the serial monitor. Taking my previous code, 
+  I embeded an if statement that would read the serial monitor reading and decide if it was loud enough. If it was, I started off with 
+  a simple buzzer tone using Arduino's tone library. Later on in my lab session, I wrote a new method for my tone and called it 
+  pitchTone. pitchTone takes in 3 integer parameters and creates a specific tone based on those inputs. The code also included the use of a method 
+  I though was really interesting called millis. I learned that millis would return the current time passed since the actual board was plugged into the computer which
+  I thout was a really neat litte method which I will most likley use in the future. I used a for loop to run the tone for a longer period of time as well. Here's my code.  
+  
+  <pre><code class="language-arduino">
+    const int sampleWindow = 50; 
+int buzzerPin = 10;
+ unsigned int sample;
+
+ void setup() 
+ {
+    Serial.begin(9600);
+    pinMode(buzzerPin, OUTPUT);
+ }
+
+ 
+ void loop() 
+ {
+    unsigned long startMillis= millis();  
+    unsigned int peakToPeak = 0;   
+
+    unsigned int signalMax = 0;
+    unsigned int signalMin = 1024;
+
+    
+    while (millis() - startMillis < sampleWindow)
+    {
+       sample = analogRead(0);   
+       if (sample < 1024)  
+       {
+          if (sample > signalMax)
+          {
+             signalMax = sample;  
+          }
+          else if (sample < signalMin)
+          {
+             signalMin = sample;  
+          }
+       }
+    }
+    peakToPeak = signalMax - signalMin;  
+
+   
+    if (peakToPeak > 10)
+    {
+      Serial.println("Noise Detected, Tone Played");
+      for(int i = 0; i < 3; i++){
+      pitchTone(buzzerPin, 800, 600);
+      }
+    }
+    
+ }
+ 
+ void pitchTone(int pin, int frequency, int duration)
+ {
+  int startTime = millis();
+  int period = 1000000/frequency;
+  while((millis() - startTime) < duration)
+  {
+    digitalWrite(pin, HIGH);
+    delayMicroseconds(period/4);
+    digitalWrite(pin, LOW);
+    delayMicroseconds(period/4);
+  }
+ }
+</code></pre>
+
+  
 
 
-  </video>
 
  
   [Back](../index.html).
