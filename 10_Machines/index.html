@@ -34,16 +34,63 @@
   here it is anyway.
   <br> 
 
-  <video controls width="1100" height="500">
+    <video controls width="1100" height="700">
         <source scr="IMG_4188.mp4"
                 type="video\mp4">
-  </video>
+    </video>
   <br>
   Next part is fabicating the small hoop I made. First thing I did was I designed two very simple shaped in Fusion 360. 
   I made a simple rectangle for the backboard and a small circle with a cutout to make the rim. I took the files to the laser printer 
   and did a very short cut. Next thing I did was I cut a small square post of wood for the support. I glued the rim to the backboard 
   then the backboard to the post to complete the hoop. I then used a drill to create a hole in the bottom of the post that would fit perfectly 
   over the shaft of the stepper motor. 
+  <br>
+  ![](./hoop.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./rim.png)
+  <br>
+  Next it was time to assemble everything. As I mentioned before, I drilled a small hole in the wooden post so it would fit on the stepper motor. 
+  I then used super glue to assemble all the parts I had fabricated. And as I also mentioned before, my computer could not handle the amount of current the stepper motor 
+  was drawing but I will still embed the program I wrote for the motor in Arduino. Just a small note for the program is that I did end up using the AccelStepper library instead of the others. So to conclude week 10 of Digital Fabrication, here is my finished product. 
+  <br>
+  ![](./hole.png) &nbsp;&nbsp;&nbsp;&nbsp; ![](./finsih.png)
+  <br>
+  <br>
+  <pre><code class="language-arduino">
+    #include <AccelStepper.h>
+
+      const int stepPin = 13;  
+      const int dirPin = 12;   
+      
+      
+      AccelStepper stepper(1, stepPin, dirPin); 
+      
+      void setup()
+      {
+      }
+      
+      void loop()
+      {
+        if (stepper.distanceToGo() == 0)
+        {
+          delay(300);
+          stepper.moveTo(rand() % 1000);
+          stepper.setMaxSpeed((rand() % 1000) + 1);
+          stepper.setAcceleration((rand() % 1000) + 1);
+          delay(500);
+          stepper.moveTo(rand() % 500);
+          stepper.moveTo(rand() % 1000);
+          stepper.setAcceleration((rand() % 600) + 1);
+          delay(1000);
+          stepper.setMaxSpeed(3000);
+          delay(500);
+          
+          
+        }
+        stepper.run();
+      }
+    </code></pre>   
+
+
+
 
 
 
