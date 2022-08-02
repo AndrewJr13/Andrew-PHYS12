@@ -3,13 +3,14 @@ body {
     font: 20px Montserrat, sans-serif;
     line-height: 1.8;
     color: black;
-
+    margin-left: 80px;
+    margin-right: 80px;
 
 
     
   }
 
-p {font-size: 16px; margin-left: 50px; margin-right: 50px;}
+p {font-size: 16px;}
 .margin {margin-bottom: 15px;}
 
 .container-fluid {
