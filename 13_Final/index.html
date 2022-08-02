@@ -139,10 +139,25 @@
     setup code using the Servo library.
   <pre><code class="language-arduino">
     const int MTR_PIN = 12;
+    Servo lock;
     lock.attach(MTR_PIN);
     lock.write(29); //starts in locked position when code is uploaded
   </code></pre>  
-    
+  As I said before, I ran the servo lock with just one gesture. Here the code and a quick video.
+  <pre><code class="language-arduino">
+    lcd.clear();
+      lcd.setCursor(6, 0);
+      lcd.print("left");
+      lock.write(129);
+      delay(500);
+      break;
+  </code></pre>
+  <br>
+  <video controls width="1000" height="700">
+    <source src="left.mp4"
+            type="video/mp4">
+  </video>
+       
 
 
     
