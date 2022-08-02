@@ -62,28 +62,27 @@
       <br>
       First, I started off by initializing my LCD display. This was a very simple process. Using the LiquidCrystal constructor,
       I defined my rs, enable, D4, D5, D6, and D7 pins and the display was up and working just like that. 
-      <pre><code class="language-arduino">
-        #include <LiquidCrystal.h>
-          LiquidCrystal lcd(8, 3, 4, 5, 6, 7);
-      </code></pre>
+  <pre><code class="language-arduino">
+      LiquidCrystal lcd(8, 3, 4, 5, 6, 7);
+  </code></pre>
       The only thing left to do was incorporate an analogWrite on pin 11 to adjust the constast of the display. On the actual LCD board, 
       the pin named V0 is the contrast controller. In my case, I connected V0 to pin 11 on my board. After that the last thing to do was to begin the display!
-      <pre><code class="language-arduino">
-        analogWrite(11, 140);
-        lcd.begin(16, 2);
-      </code></pre>
+  <pre><code class="language-arduino">
+    analogWrite(11, 140);
+    lcd.begin(16, 2);
+  </code></pre>
       Next, I decided to code the sensor and lock before I assembled the project. I already had the 
       electronics mounted and running so I started the coding process. First part of coding was getting the sensor the recognize gestures.
       Unfortunatley the Adafruit library that went with the sensor was not able to be used since it collided with the LiquidCrystal library. Even more 
       of a drawback was the fact that the only alternate library (SparkFun_APDS9960) was a bit more complicated. Mainly, the fact that the Adafruit library was able to use 
       if statements for the gestures. For example:
       <br>
-      <pre><code class="language-arduino">
-        if (DIR_RIGHT)
-        {
-          //Do this 
-        }
-      </code></pre>
+  <pre><code class="language-arduino">
+    if (DIR_RIGHT)
+    {
+      //Do this 
+    }
+  </code></pre>
       <br>
     Unfortunatley the Sparkfun library would not work with if statments. This was mainly due to the readGesture() method.
     This method was very confusing. After further research, I found out that the method returned an integer value. I soon was excited and 
@@ -92,39 +91,39 @@
     gesture sensor and found out I would have to use a switch and cases. Switches and cases were something I was familiar with from my Java and Javascript experience but I never 
     really loved them. Unfortunatley it seemed this was the only way. The next step was to incorporate code for an interrupt. First I bound the 
     the interrupt to pin 2 on my Arduino, and set an interrupt flag. I also created my sensor object which i just called "apds."
-      <pre><code class="language-arduino">
-        #define APDS9960_INT 2
-        int isr_flag = 0;
-        SparkFun_APDS9960 apds = SparkFun_APDS9960();
-        pinMode(APDS9960_INT, INPUT);
-      </code></pre>
+  <pre><code class="language-arduino">
+    #define APDS9960_INT 2
+    int isr_flag = 0;
+    SparkFun_APDS9960 apds = SparkFun_APDS9960();
+    pinMode(APDS9960_INT, INPUT);
+  </code></pre>
     Next I used Arduino's "attachInterrupt" method and a method that changes the interrupt flag
     called "interruptRoutine."
       <pre><code class="language-arduino">
-        attachInterrupt(0, interruptRoutine, FALLING);
-        void interruptRoutine() 
-        {
-          isr_flag = 1;
-        }
-      </code></pre>
+    attachInterrupt(0, interruptRoutine, FALLING);
+    void interruptRoutine() 
+    {
+      isr_flag = 1;
+    }
+  </code></pre>
     Next it was time to create the loop and incorporate the interrupt inside the loop. First, the loop 
     checks if isr_flag = 1 which it should throuh the interruptRoutine method which sets it to 1. Next, the program 
     detaches the Interrupt and resets isr_flag. I then implemented my main sequence there (I will get to that later), reset isr_flag, and then
     re-attached the interrupt. This sequence of code would mean that everytime I waved my hand in front of the sensor, my loop wold run my 
     gestureSequence() method which I will showcase later. 
-      <pre><code class="language-arduino">
-        if ( isr_flag == 1 ) {
-          detachInterrupt(0);
-          lcd.clear();
-          gestureSequence();
-          isr_flag = 0;
-          attachInterrupt(0, interruptRoutine, FALLING);
-      </code></pre>
+  <pre><code class="language-arduino">
+    if ( isr_flag == 1 ) {
+      detachInterrupt(0);
+      lcd.clear();
+      gestureSequence();
+      isr_flag = 0;
+      attachInterrupt(0, interruptRoutine, FALLING);
+  </code></pre>
     After creating the interrupt, I started working on the gestureSequence() method. First off was 
     an if statement using a method from the Sparkfun library. Very simple:
-      <pre><code class="language-arduino">
-        if ( apds.isGestureAvailable() ) {
-      </code></pre>
+  <pre><code class="language-arduino">
+    if ( apds.isGestureAvailable() ) {
+  </code></pre>
     Next I created my switch. In my case, the switch will keep running the readGesture() method 
     until it matches it to a specific case. In each case, I cleared the LCD display 
 
