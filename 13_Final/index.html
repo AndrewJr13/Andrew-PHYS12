@@ -36,12 +36,12 @@
     <br>
     <head>Initial Progress: Wiring</head>
     <br>
-    <center>To start the project off, I got my initial wiring and coding done. I first wired 
+     To start the project off, I got my initial wiring and coding done. I first wired 
       my LCD display, sensor, and servo to my Arduino. Many connections went through the breadboard 
       and the wires were very messy and tangled which was the motive to make a box to contain them on the final 
       structure.
       <br> 
-      ![](./wire11.png)
+      <center>![](./wire12.png)</center>
       <br>
       <body>Before I knew it, it was time to mount my electronics. Using a very simple 3D design and taking measurements of my components, 
       I had a frame for all of my electronics. The LCD display would take up the main portion of the frame. The sensor was offset and mounted to 
@@ -49,14 +49,36 @@
       LCD display. Below the display, a small hole would be origiinally dedicated to a button that would activate the system, but later I decided that I wanted
       the system to be activated with proximity. So instead of a button, I would fit an LED into the hole.</body>
       <br>
-      ![](./lcd.png)
+      <center>![](./lcd1.png)</center>
       <br>
       Pins soldered onto sensor and glue to structure to minimize messiness of wiring. 
       <br>
-      ![](./sens.png)
+      <center>![](./sens1.png)</center>
       <br>
+      And here is the finished wiring frame. 
+      <br>
+      <center>![](./frame1)</center>
+      <br>
+      <br>
+      <br>
+      <head>Next Steps: Coding</head>
+      <br>
+      Next, I decided to code the sensor and lock before I assembled the project. I already had the 
+      electronics mounted and running so I started the coding process. First part of coding was getting the sensor the recognize gestures.
+      Unfortunatley the Adafruit library that went with the sensor was not able to be used since it collided with the LiquidCrystal library. Even more 
+      of a drawback was the fact that the only alternate library was a bit more complicated. Mainly, the fact that the Adafruit library was able to use 
+      if statements for the gestures. For example:
+      <br>
+      <pre><code class="language-arduino">
+        if (DIR_RIGHT)
+        {
+          //Do this 
+        }
+      </code></pre>
+      <br>
+      
 
-    </center>
+    
 
   
 
