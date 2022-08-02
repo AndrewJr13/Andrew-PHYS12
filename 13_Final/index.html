@@ -205,7 +205,7 @@
   of the "correct" array. After this I cleared the LCD, printed "welcome," and turned the servo. I also added two loops inside this statment. 
   One was simply to control my LED and the other reset the elements of the "current" array. I then set index, count, and numRight back to 0.
   <pre><code class="language-arduino">
-    if (numRight == 7)
+    if (numRight == sizeof(correct))
       {
         lcd.clear();
         lock.write(129);
@@ -219,7 +219,7 @@
         }
         delay(1500);
         lcd.clear();
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < sizeof(current); i++)
         {
           current[i] = 0;
         }
@@ -228,7 +228,7 @@
         index = 0;
       }
   </code></pre>   
-        
+
 
 
     
