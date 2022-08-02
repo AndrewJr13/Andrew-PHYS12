@@ -34,16 +34,16 @@
     <head>Initial Progress: Wiring</head>
     <br>
      To start the project off, I got my initial wiring and coding done. I first wired 
-      my LCD display, sensor, and servo to my Arduino. Many connections went through the breadboard 
+      my LCD, sensor, and servo to my Arduino. Many connections went through the breadboard 
       and the wires were very messy and tangled which was the motive to make a box to contain them on the final 
       structure.
       <br> 
       <center>![](./wire12.png)</center>
       <br>
       <body>Before I knew it, it was time to mount my electronics. Using a very simple 3D design and taking measurements of my components, 
-      I had a frame for all of my electronics. The LCD display would take up the main portion of the frame. The sensor was offset and mounted to 
+      I had a frame for all of my electronics. The LCD would take up the main portion of the frame. The sensor was offset and mounted to 
       a small arm coming out from the main frame. My reasoning for this was to give the user room to gesture but also be able to see the output on the 
-      LCD display. Below the display, a small hole would be origiinally dedicated to a button that would activate the system, but later I decided that I wanted
+      LCD. Below the display, a small hole would be origiinally dedicated to a button that would activate the system, but later I decided that I wanted
       the system to be activated with proximity. So instead of a button, I would fit an LED into the hole.</body>
       <br>
       <center>![](./lcd1.png)</center>
@@ -60,7 +60,7 @@
       <br>
       <head>Next Steps: Coding</head>
       <br>
-      First, I started off by initializing my LCD display. This was a very simple process. Using the LiquidCrystal constructor,
+      First, I started off by initializing my LCD. This was a very simple process. Using the LiquidCrystal constructor,
       I defined my rs, enable, D4, D5, D6, and D7 pins and the display was up and working just like that. 
   <pre><code class="language-arduino">
       LiquidCrystal lcd(8, 3, 4, 5, 6, 7);
@@ -125,7 +125,7 @@
     if ( apds.isGestureAvailable() ) {
   </code></pre>
     Next I created my switch. In my case, the switch will keep running the readGesture() method 
-    until it matches it to a specific case. In each case, I cleared the LCD display, set the cursor so the text would be 
+    until it matches it to a specific case. In each case, I cleared the LCD, set the cursor so the text would be 
     centered then printed the direction corresponding to the gesture. For example, here is what the 
     DIR_UP case looked like. 
   <pre><code class="language-arduino">
@@ -182,10 +182,53 @@
         delay(500);
         current[index] = 1;
         index++;
+        count++; //see next section
   </code></pre>  
-  
-
-       
+  So now I had the arrays taken care of. I now needed to compare both arrays. If the arrays matched, the servo would open and if not then 
+  it would stay closed. Fortunatley, my prior coding experience came in handy. First I needed a way for the program to know
+  when the amount of gestures performed matched the number of elements in the "correct" array so the sensor would not run past that point. So I created 
+  a "count" variable. "Count" would increment inside of every case and I ran a quick if statement to check when count was the same as the size of the correct array. 
+  Next I created a for loop that would run through both arrays and compare each element inside. If the elements matched, a variable called "numRight" would increment. 
+  <pre><code class="language-arduino">
+    if (count == sizeof(correct))
+    {
+      for (int i = 0; i < sizeof(correct); i++)
+      {
+        if (current[i] == correct[i])
+        {
+          numRight++;
+        }
+      }
+  </code></pre>  
+  After this, it was a simple journey to the end. I ran an if statement that checked if numRight was 
+  equal to the size of the correct array. If it is, that means every element of the "current" array matches every element 
+  of the "correct" array. After this I cleared the LCD, printed "welcome," and turned the servo. I also added two loops inside this statment. 
+  One was simply to control my LED and the other reset the elements of the "current" array. I then set index, count, and numRight back to 0.
+  <pre><code class="language-arduino">
+    if (numRight == 7)
+      {
+        lcd.clear();
+        lock.write(129);
+        lcd.print("welcome");
+        for (int i = 0; i < 3; i++)
+        {
+          analogWrite(greenLight, 255);
+          delay(100);
+          analogWrite(greenLight, 0);
+          delay(100);
+        }
+        delay(1500);
+        lcd.clear();
+        for (int i = 0; i < 7; i++)
+        {
+          current[i] = 0;
+        }
+        numRight = 0;
+        count = 0;
+        index = 0;
+      }
+  </code></pre>   
+        
 
 
     
