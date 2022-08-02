@@ -125,7 +125,24 @@
     if ( apds.isGestureAvailable() ) {
   </code></pre>
     Next I created my switch. In my case, the switch will keep running the readGesture() method 
-    until it matches it to a specific case. In each case, I cleared the LCD display 
+    until it matches it to a specific case. In each case, I cleared the LCD display, set the cursor so the text would be 
+    centered then printed the direction corresponding to the gesture. For example, here is what the 
+    DIR_UP case looked like. 
+  <pre><code class="language-arduino">
+    lcd.clear();
+    cd.setCursor(7, 0);
+    lcd.print("up");
+    delay(500);
+    break;
+  </code></pre>  
+    After this, my next step was to set up my servo and test it with just one gesture. Here's the simple
+    setup code using the Servo library.
+  <pre><code class="language-arduino">
+    const int MTR_PIN = 12;
+    lock.attach(MTR_PIN);
+    lock.write(29); //starts in locked position when code is uploaded
+  </code></pre>  
+    
 
 
     
