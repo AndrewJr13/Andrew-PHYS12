@@ -258,7 +258,218 @@
             type="video/mp4">
   </video>
   <br>
+  The last part of my program is the proximity lock. Fortunatley, this too could be done in a case. 
+  My DIR_FAR case detected when a user would slowly distance themselves from the sensor and I planned to 
+  have it lock the door. First, I reset count, index, and numRight to 0. Then I clear the LCD and print "locking..."
+  I then use a loop to flash the LED blue 2 times. Then the servo locks and the "current" array is reset. Thats it!
+  <pre><code class="language-arduino">
+    count = 0;
+        index = 0;
+        lcd.clear();
+        lcd.print("locking...");
+        delay(1000);
+        for (int i = 0; i < 2; i++)
+        {
+          analogWrite(blueLight, 255);
+          delay(100);
+          analogWrite(blueLight, 0);
+          delay(100);
+        }
+        lock.write(29);
+        lcd.clear();
+        numRight = 0;
+        for (int i = 0; i < 7; i++)
+        {
+          current[i] = 0;
+        }
+        break;
+  </code></pre>   
+  Finally, here is the entire program. 
+  <br>   
+  <pre><code class="language-arduino">
+    #include <Wire.h>
+      #include <SparkFun_APDS9960.h>
+      #include <LiquidCrystal.h>
+      #include <Servo.h>
+      LiquidCrystal lcd(8, 3, 4, 5, 6, 7);
+      
+      #define APDS9960_INT    2
+      const int MTR_PIN = 12;
+      
+      int current[] = {0, 0, 0, 0, 0, 0, 0};
+      int correct[] = {1, 3, 4, 3, 2, 4, 3};
+      SparkFun_APDS9960 apds = SparkFun_APDS9960();
+      int isr_flag = 0;
+      int val = 0;
+      int count = 0;
+      int index = 0;
+      int numRight = 0;      
+      int redLight = 9;
+      int greenLight = 10;
+      int blueLight = 13;
+      Servo lock;
+      
+      void setup() {
+      
+        pinMode(APDS9960_INT, INPUT);
+        analogWrite(11, 140);
+        lcd.begin(16, 2);
+        lock.attach(MTR_PIN);
+        lock.write(29);
+        pinMode(redLight, OUTPUT);
+        pinMode(greenLight, OUTPUT);
+        pinMode(blueLight, OUTPUT);
+        Serial.begin(9600);
+        attachInterrupt(0, interruptRoutine, FALLING);
+        if ( apds.enableGestureSensor(true) ) {
+          Serial.println(F("Gesture sensor is now running"));
+        } else {
+          Serial.println(F("Something went wrong during gesture sensor"));
+        }
+      }
+      void loop() {
 
+        if ( isr_flag == 1 ) {
+          detachInterrupt(0);
+          lcd.clear();
+          handleGesture();
+          isr_flag = 0;
+          attachInterrupt(0, interruptRoutine, FALLING);
+          if (count == 7)
+          {
+            for (int i = 0; i < 7; i++)
+            {
+              if (current[i] == correct[i])
+              {
+                numRight++;
+              }
+            }
+            if (numRight == 7)
+            {
+              lcd.clear();
+              lock.write(129);
+              lcd.print("welcome");
+              for (int i = 0; i < 3; i++)
+              {
+                analogWrite(greenLight, 255);
+                delay(100);
+                analogWrite(greenLight, 0);
+                delay(100);
+              }
+              delay(1500);
+              lcd.clear();
+              for (int i = 0; i < 7; i++)
+              {
+                current[i] = 0;
+              }
+              numRight = 0;
+              count = 0;
+              index = 0;
+            }
+            if (numRight != 7 && count != 0)
+            {
+              lcd.clear();
+              lcd.print("incorrect");
+              analogWrite(redLight, 255);
+              delay(2000);
+              analogWrite(redLight, 0);
+              lcd.clear();
+              for (int i = 0; i < 7; i++)
+              {
+                current[i] = 0;
+              }
+              numRight = 0;
+              count = 0;
+              index = 0;
+            }
+      
+          }
+        }
+      }
+      
+      
+      void interruptRoutine() {
+        isr_flag = 1;
+      }
+      
+      void handleGesture() {
+        if ( apds.isGestureAvailable() ) {
+          switch ( apds.readGesture() ) {
+            case DIR_UP:
+              lcd.clear();
+              lcd.setCursor(7, 0);
+              lcd.print("up");
+              delay(500);
+              current[index] = 1;
+              index++;
+              count++;
+              break;
+            case DIR_DOWN:
+              lcd.clear();
+              lcd.setCursor(6, 0);
+              lcd.print("down");
+              delay(500);
+              current[index] = 2;
+              index++;
+              count++;
+              break;
+            case DIR_LEFT:
+              lcd.clear();
+              lcd.setCursor(6, 0);
+              lcd.print("left");
+              delay(500);
+              current[index] = 3;
+              index++;
+              count++;
+              break;
+            case DIR_RIGHT:
+              lcd.clear();
+              lcd.setCursor(5, 0);
+              lcd.print("right");
+              delay(500);
+              current[index] = 4;
+              index++;
+              count++;
+              break;
+            case DIR_FAR:
+              count = 0;
+              index = 0;
+              lcd.clear();
+              lcd.print("locking...");
+              delay(1000);
+              for (int i = 0; i < 2; i++)
+              {
+                analogWrite(blueLight, 255);
+                delay(100);
+                analogWrite(blueLight, 0);
+                delay(100);
+              }
+              lock.write(29);
+              lcd.clear();
+              numRight = 0;
+              for (int i = 0; i < 7; i++)
+              {
+                current[i] = 0;
+              }
+              break;
+            case DIR_NEAR:
+              count = 0;
+              index = 0;
+              numRight = 0;
+              lcd.clear();
+              lcd.print("hello");
+              delay(1000);
+              lcd.clear();
+              lcd.print("begin sequence");
+              delay(1000);
+              lcd.clear();
+              break;
+      
+      
+          }
+        }
+      }
+  </code></pre>  
 
 
     
