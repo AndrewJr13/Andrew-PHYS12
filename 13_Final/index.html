@@ -78,7 +78,44 @@
     thought I could incorporate an if statement with the "==" binary operator if each direction returned a different integer. Unfortunatley this was not the case. 
     After further testing, I found the method returned 0 for every direction. Something that still confuses me to this day. So my last resort was to take a peek at the example code for the 
     gesture sensor and found out I would have to use a switch and cases. Switches and cases were something I was familiar with from my Java and Javascript experience but I never 
-    really loved them. Unfortunatley it seemed this was the only way. 
+    really loved them. Unfortunatley it seemed this was the only way. The next step was to incorporate code for an interrupt. First I bound the 
+    the interrupt to pin 2 on my Arduino, and set an interrupt flag. 
+    <pre><code class="language-arduino">
+      #define APDS9960_INT 2
+      int isr_flag = 0;
+      pinMode(APDS9960_INT, INPUT);
+    </code></pre>
+    Next I used Arduino's "attachInterrupt" method and a method that changes the interrupt flag
+    called "interruptRoutine."
+    <pre><code class="language-arduino">
+      attachInterrupt(0, interruptRoutine, FALLING);
+
+      void interruptRoutine() 
+      {
+        isr_flag = 1;
+      }
+    </code></pre>
+    Next it was time to create the loop and incorporate the interrupt inside the loop. First, the loop 
+    checks if isr_flag = 1 which it should throuh the interruptRoutine method which sets it to 1. Next, the program 
+    detaches the Interrupt and resets isr_flag. I then implemented my main sequence there (I will get to that later), reset isr_flag, and then
+    re-attached the interrupt. This sequence of code would mean that everytime I waved my hand in front of the sensor, my loop wold run my 
+    gestureSequence() method which I will showcase later. 
+    <pre><code class="language-arduino">
+      if ( isr_flag == 1 ) {
+        detachInterrupt(0);
+        lcd.clear();
+        gestureSequence();
+        isr_flag = 0;
+        attachInterrupt(0, interruptRoutine, FALLING);
+    </code></pre>
+    After creating the interrupt, I started working on the gestureSequence() method. First off was 
+    an if statement using a method from the Sparkfun library. Very simple:
+    <pre><code class="language-arduino">
+      if ( apds.isGestureAvailable() ) {
+    </code></pre>
+    
+    
+
 
     
 
