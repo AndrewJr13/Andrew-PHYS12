@@ -228,7 +228,28 @@
         index = 0;
       }
   </code></pre>   
+  After this, I created another if statement for an incorrect sequence. All it does is flash the LED red, print "incorrect,"
+  then resets the "current" array and sets index, count, and numRight back to 0.
+  <pre><code class="language-arduino">
+    if (numRight != 7 && count != 0)
+    {
+      lcd.clear();
+      lcd.print("incorrect");
+      analogWrite(redLight, 255);
+      delay(2000);
+      analogWrite(redLight, 0);
+      lcd.clear();
+      for (int i = 0; i < 7; i++)
+      {
+        current[i] = 0;
+      }
+      numRight = 0;
+      count = 0;
+      index = 0;
+    }
 
+  } //end if (count == sizeof(correct))
+  </code></pre>    
 
 
     
