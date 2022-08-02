@@ -25,13 +25,10 @@
     display, a 360 degree servo motor, a RBG 4-pin LED, and of course the Adafruit APDS9960 proximity and gesture sensor. So thank you to my classmates and instructors for 
     a great semester and here is my final project. 
   </center>
-  <br>
-  <br>
 
   <center> <iframe width="1000" height="600"
     src="https://www.youtube.com/embed/fVjSkdoy6QQ">
     </iframe> </center>
-    <br>
     <br>
     <br>
     <head>Initial Progress: Wiring</head>
@@ -57,7 +54,7 @@
       <br>
       And here is the finished wiring frame. 
       <br>
-      <center>![](./frame1)</center>
+      <center>![](./frame1.png)</center>
       <br>
       <br>
       <br>
@@ -66,7 +63,7 @@
       Next, I decided to code the sensor and lock before I assembled the project. I already had the 
       electronics mounted and running so I started the coding process. First part of coding was getting the sensor the recognize gestures.
       Unfortunatley the Adafruit library that went with the sensor was not able to be used since it collided with the LiquidCrystal library. Even more 
-      of a drawback was the fact that the only alternate library was a bit more complicated. Mainly, the fact that the Adafruit library was able to use 
+      of a drawback was the fact that the only alternate library (SparkFun_APDS9960) was a bit more complicated. Mainly, the fact that the Adafruit library was able to use 
       if statements for the gestures. For example:
       <br>
       <pre><code class="language-arduino">
@@ -76,7 +73,12 @@
         }
       </code></pre>
       <br>
-      
+    Unfortunatley the Sparkfun library would not work with if statments. This was mainly due to the readGesture() method.
+    This method was very confusing. After further research, I found out that the method returned an integer value. I soon was excited and 
+    thought I could incorporate an if statement with the "==" binary operator if each direction returned a different integer. Unfortunatley this was not the case. 
+    After further testing, I found the method returned 0 for every direction. Something that still confuses me to this day. So my last resort was to take a peek at the example code for the 
+    gesture sensor and found out I would have to use a switch and cases. Switches and cases were something I was familiar with from my Java and Javascript experience but I never 
+    really loved them. Unfortunatley it seemed this was the only way. 
 
     
 
