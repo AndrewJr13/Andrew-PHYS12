@@ -150,13 +150,41 @@
       lcd.print("left");
       lock.write(129);
       delay(500);
+      lcd.print("welcome");
       break;
   </code></pre>
   <br>
-  <video controls width="1000" height="700">
+  <video controls width="1100" height="700">
     <source src="left.mp4"
             type="video/mp4">
   </video>
+  Next step was the most time consuming but also the most important. I took some time to brainstorm 
+  a way to have a sequence of hand gestures activate the servo and unlock the door. Ultimatley, I decided 
+  to use a simple integer array. I started by declaring two arrays. One for the current gesture sequence and 
+  the other would be the correct sequence. 
+  <pre><code class="language-arduino">
+    int current[] = {0, 0, 0, 0, 0, 0, 0};
+    int correct[] = {1, 3, 4, 3, 2, 4, 3}; //each number is a gesture 1 = up, 2 = down, 3 = left, 4 = right
+  </code></pre> 
+  Next course of action was having each case set an element of the array to an integer that matches the direction. 
+  I defined each number above in the code. So 1 is up, 2 is down, 3 is left, 4 is right. Simple enough. Now im not very familiar
+  with C so I originally thought of arrayLists. Whenever I code with Java, I love using arrayLists for things like these. It would be much easier
+  to use the add and remove methods inside the cases but unfortunatley it didn't seem that something like this would be 
+  possible on C. So I created an integer called "index." Index would increment evertime a gesture was detected and then 
+  my code would set that index of the array to an integer based off of the gesture. For example, if index = 0 and the user gestures 
+  downward, index 0 of the "current" array will be set to 2 and index will increment so that the next gesture will occupy the next 
+  index of the array. So now the DIR_UP case was looking something like this. 
+  <pre><code class="language-arduino">
+    case DIR_UP:
+        lcd.clear();
+        lcd.setCursor(7, 0);
+        lcd.print("up");
+        delay(500);
+        current[index] = 1;
+        index++;
+  </code></pre>  
+  
+
        
 
 
